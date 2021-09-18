@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Repositories\PaymentMethod;
+namespace App\Repositories\Eloquents;
 
 use App\Models\PaymentMethod;
+use App\Repositories\Interfaces\PaymentMethodRepositoryInterfaces;
 use Illuminate\Http\Request;
 
-class RoleEloquent implements PaymentMethodRepository
+class PaymentMethodRepositoryEloquents implements PaymentMethodRepositoryInterfaces
 {
     public function create(Request $request)
     {
@@ -14,12 +15,12 @@ class RoleEloquent implements PaymentMethodRepository
         $model->save();
     }
 
-    public function getAll()
+    public function findAll()
     {
         return PaymentMethod::paginate(10);
     }
 
-    public function getById($id)
+    public function findByID($id)
     {
         return PaymentMethod::find($id);
     }

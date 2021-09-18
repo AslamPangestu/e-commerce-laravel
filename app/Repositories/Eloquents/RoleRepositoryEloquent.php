@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Repositories\Role;
+namespace App\Repositories\Eloquents;
 
 use App\Models\Role;
+use App\Repositories\Interfaces\RoleRepositoryInterfaces;
 use Illuminate\Http\Request;
 
-class RoleEloquent implements RoleRepository
+class RoleRepositoryEloquent implements RoleRepositoryInterfaces
 {
     public function create(Request $request)
     {
@@ -14,12 +15,12 @@ class RoleEloquent implements RoleRepository
         $model->save();
     }
 
-    public function getAll()
+    public function findAll()
     {
         return Role::paginate(10);
     }
 
-    public function getById($id)
+    public function findByID($id)
     {
         return Role::find($id);
     }

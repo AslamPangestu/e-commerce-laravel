@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Repositories\TransactionStatus;
+namespace App\Repositories\Eloquents;
 
 use App\Models\TransactionStatus;
+use App\Repositories\Interfaces\TransactionStatusRepositoryInterfaces;
 use Illuminate\Http\Request;
 
-class RoleEloquent implements TransactionStatusRepository
+class TransactionStatusRepositoryEloquent implements TransactionStatusRepositoryInterfaces
 {
     public function create(Request $request)
     {
@@ -14,12 +15,12 @@ class RoleEloquent implements TransactionStatusRepository
         $model->save();
     }
 
-    public function getAll()
+    public function findAll()
     {
         return TransactionStatus::paginate(10);
     }
 
-    public function getById($id)
+    public function findByID($id)
     {
         return TransactionStatus::find($id);
     }

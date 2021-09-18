@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Repositories\ProductCategory;
+namespace App\Repositories\Eloquents;
 
 use App\Models\ProductCategory;
+use App\Repositories\Interfaces\ProductCategoryRepositoryInterfaces;
 use Illuminate\Http\Request;
 
-class RoleEloquent implements ProductCategoryRepository
+class ProductCategoryRepositoryEloquents implements ProductCategoryRepositoryInterfaces
 {
     public function create(Request $request)
     {
@@ -14,12 +15,12 @@ class RoleEloquent implements ProductCategoryRepository
         $model->save();
     }
 
-    public function getAll()
+    public function findAll()
     {
         return ProductCategory::paginate(10);
     }
 
-    public function getById($id)
+    public function findByID($id)
     {
         return ProductCategory::find($id);
     }
