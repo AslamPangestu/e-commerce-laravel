@@ -15,14 +15,28 @@ class ProductCategoryRepositoryEloquents implements ProductCategoryRepositoryInt
         $model->save();
     }
 
-    public function findAll()
+    public function findAll($limit, $query, $showProduct)
     {
-        return ProductCategory::paginate(10);
+        $model = ProductCategory::query();
+
+        if ($query['name']) {
+            $model->where('name', 'like', '%' . $query['name'] . '%');
+        }
+
+        if ($showProduct) {
+            $model->with('products');
+        }
+        return $model->paginate($limit);
     }
 
-    public function findByID($id)
+    public function findByID($id, $showProduct)
     {
-        return ProductCategory::find($id);
+        $model = ProductCategory::query();
+
+        if ($showProduct) {
+            $model->with('products');
+        }
+        return $model->find($id);
     }
 
     public function update(Request $request, $id)
