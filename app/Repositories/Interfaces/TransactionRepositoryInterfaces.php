@@ -2,10 +2,9 @@
 
 namespace App\Repositories\Interfaces;
 
-use Illuminate\Http\Request;
-
 interface TransactionRepositoryInterfaces
 {
+    public function create($request);
     public function findAll($limit, $query);
     public function findByID($id);
 }

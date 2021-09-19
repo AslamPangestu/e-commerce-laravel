@@ -15,7 +15,10 @@ class TransactionStatusSeeder extends Seeder
     public function run()
     {
         TransactionStatus::create(['name' => 'PENDING']);
-        TransactionStatus::create(['name' => 'PROCESS']);
-        TransactionStatus::create(['name' => 'FINISH']);
+        TransactionStatus::create(['name' => 'SHIPPING']);
+        TransactionStatus::create(['name' => 'SHIPPED']);
+        TransactionStatus::create(['name' => 'SUCCESS']);
+        TransactionStatus::create(['name' => 'CANCELLED']);
+        TransactionStatus::create(['name' => 'FAILED']);
     }
 }

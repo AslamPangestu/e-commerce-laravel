@@ -4,17 +4,19 @@ namespace App\Http\Controllers\API;
 
 use App\Helpers\ResponseFormatter;
 use App\Http\Controllers\Controller;
+use App\Repositories\Interfaces\ProductTransactionRepositoryInterfaces;
 use App\Repositories\Interfaces\TransactionRepositoryInterfaces;
 use Illuminate\Http\Request;
 
 class TransactionController extends Controller
 {
     use ResponseFormatter;
-    protected $repository;
+    protected $repository, $repository1;
 
-    public function __construct(TransactionRepositoryInterfaces $repository)
+    public function __construct(TransactionRepositoryInterfaces $repository, ProductTransactionRepositoryInterfaces $repository1)
     {
         $this->repository = $repository;
+        $this->repository1 = $repository1;
     }
 
     /**
@@ -40,6 +42,41 @@ class TransactionController extends Controller
         ];
         return $this->getAll($limit, $query);
     }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function checkout(Request $request)
+    {
+        $request->validate([
+            'items' => 'required|array',
+            'items.*.id' => 'exists:products,id',
+            'total_price' => 'required',
+            'shipping_price' => 'required',
+            'status' => 'required|in:PENDING,CANCELLED',
+        ]);
+
+        $transaction = $this->repository->create([
+            'address' => $request->address,
+            'payment_method_id' => 1,
+            'total_price' => $request->total_price,
+            'shipping_price' => $request->shipping_price,
+            'status_id' => $request->status
+        ]);
+
+        foreach ($request->products as $product) {
+            $this->repository1->create([
+                'products_id' => $product['id'],
+                'transactions_id' => $transaction->id,
+                'quantity' => $product['quantity']
+            ]);
+        }
+
+        return $this->success($transaction->load('products.product'), 'Transaksi berhasil');
+    }
+
+    // HELPERS
 
     function getById($id)
     {

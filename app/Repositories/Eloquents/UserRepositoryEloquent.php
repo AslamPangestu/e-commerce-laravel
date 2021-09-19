@@ -12,7 +12,7 @@ class UserRepositoryEloquent implements UserRepositoryInterfaces
 {
     public function create($request)
     {
-        User::create([
+        return User::create([
             'name' => $request['name'],
             'email' => $request['email'],
             'username' => $request['username'],
