@@ -9,6 +9,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 use Laravel\Fortify\Rules\Password;
 
 class AuthController extends Controller
@@ -90,8 +91,10 @@ class AuthController extends Controller
             $user = $this->repository->findOneByQuery([
                 ['email', '=', $request->email]
             ]);
-            if (!Hash::check($request->password, $user->password, [])) {
-                throw new Exception('Invalid Credentials');
+            if (! $user || ! Hash::check($request->password, $user->password)) {
+                throw ValidationException::withMessages([
+                    'email' => ['The provided credentials are incorrect.'],
+                ]);
             }
 
             $tokenResult = $user->createToken('authToken')->plainTextToken;
@@ -103,7 +106,7 @@ class AuthController extends Controller
         } catch (Exception $error) {
             return $this->error([
                 'message' => 'Something went wrong',
-                'error' => $error,
+                'error' => $error->getMessage(),
             ], 'Authentication Failed', 500);
         }
     }
@@ -115,5 +118,22 @@ class AuthController extends Controller
     public function profile(Request $request)
     {
         return $this->success($request->user(), 'Data profile user berhasil diambil');
+    }
+
+    public function logout(Request $request)
+    {
+        $token = $request->user()->currentAccessToken()->delete();
+
+        return $this->success($token,'Token Revoked');
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $data = $request->all();
+
+        $user = Auth::user();
+        $user->update($data);
+
+        return $this->success($user,'Profile Updated');
     }
 }
