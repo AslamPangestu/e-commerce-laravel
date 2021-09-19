@@ -3,7 +3,7 @@
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\ProductCategoryController;
 use App\Http\Controllers\API\ProductController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\API\TransactionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,9 +18,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::prefix('v1')->group(function () {
-    Route::get('products', [ProductController::class, 'all']);
-    Route::get('product-categories', [ProductCategoryController::class, 'all']);
-
     Route::prefix('auth')->group(function () {
         Route::post('register', [AuthController::class, 'register']);
         Route::post('login', [AuthController::class, 'login']);
@@ -30,5 +27,13 @@ Route::prefix('v1')->group(function () {
             Route::post('profile', [AuthController::class, 'updateProfile']);
             Route::post('logout', [AuthController::class, 'logout']);
         });
+    });
+
+    Route::get('products', [ProductController::class, 'all']);
+    Route::get('product-categories', [ProductCategoryController::class, 'all']);
+
+    Route::middleware(['auth:sanctum'])->group(function () {
+        Route::get('transactions', [TransactionController::class, 'transaction']);
+        Route::post('checkout', [TransactionController::class, 'checkout']);
     });
 });
