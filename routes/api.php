@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\ProductCategoryController;
 use App\Http\Controllers\API\ProductController;
 use Illuminate\Http\Request;
@@ -23,4 +24,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::prefix('v1')->group(function () {
     Route::get('products', [ProductController::class, 'all']);
     Route::get('product-categories', [ProductCategoryController::class, 'all']);
+
+    Route::prefix('auth')->group(function () {
+        Route::post('register', [AuthController::class, 'register']);
+    });
 });

@@ -17,7 +17,12 @@ class ProductController extends Controller
     {
         $this->repository = $repository;
     }
-
+    
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
+     */
     public function all(Request $request)
     {
         // SETUP REQUEST
