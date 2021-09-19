@@ -17,10 +17,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 Route::prefix('v1')->group(function () {
     Route::get('products', [ProductController::class, 'all']);
     Route::get('product-categories', [ProductCategoryController::class, 'all']);
@@ -28,5 +24,9 @@ Route::prefix('v1')->group(function () {
     Route::prefix('auth')->group(function () {
         Route::post('register', [AuthController::class, 'register']);
         Route::post('login', [AuthController::class, 'login']);
+
+        Route::middleware('auth:sanctum')->group(function () {
+            Route::get('profile', [AuthController::class, 'profile']);
+        });
     });
 });

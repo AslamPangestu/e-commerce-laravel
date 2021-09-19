@@ -107,4 +107,13 @@ class AuthController extends Controller
             ], 'Authentication Failed', 500);
         }
     }
+
+    /**
+     * @param Request $request
+     * @return mixed
+     */
+    public function profile(Request $request)
+    {
+        return $this->success($request->user(), 'Data profile user berhasil diambil');
+    }
 }
