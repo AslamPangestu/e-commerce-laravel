@@ -11,12 +11,12 @@ use Illuminate\Http\Request;
 class TransactionController extends Controller
 {
     use ResponseFormatter;
-    protected $repository, $repository1;
+    protected $repository, $productRepository;
 
-    public function __construct(TransactionRepositoryInterfaces $repository, ProductTransactionRepositoryInterfaces $repository1)
+    public function __construct(TransactionRepositoryInterfaces $repository, ProductTransactionRepositoryInterfaces $productRepository)
     {
         $this->repository = $repository;
-        $this->repository1 = $repository1;
+        $this->productRepository = $productRepository;
     }
 
     /**
@@ -66,7 +66,7 @@ class TransactionController extends Controller
         ]);
 
         foreach ($request->products as $product) {
-            $this->repository1->create([
+            $this->productRepository->create([
                 'products_id' => $product['id'],
                 'transactions_id' => $transaction->id,
                 'quantity' => $product['quantity']

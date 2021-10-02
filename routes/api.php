@@ -22,7 +22,7 @@ Route::prefix('v1')->group(function () {
         Route::post('register', [AuthController::class, 'register']);
         Route::post('login', [AuthController::class, 'login']);
 
-        Route::middleware(['auth:sanctum'])->group(function () {
+        Route::middleware('auth:sanctum')->group(function () {
             Route::get('profile', [AuthController::class, 'profile']);
             Route::post('profile', [AuthController::class, 'updateProfile']);
             Route::post('logout', [AuthController::class, 'logout']);
